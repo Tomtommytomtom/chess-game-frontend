@@ -1,9 +1,10 @@
 <template>
-  <div>
+  <div class="pa-2">
     <user-list-item
       v-for="user in users"
       :key="user.connectionId"
       :user="user"
+      v-bind="$attrs"
     />
   </div>
 </template>
@@ -11,8 +12,9 @@
 <script lang="ts">
 import { defineComponent } from "@vue/composition-api";
 import UserListItem from "./UserListItem.vue";
-import { ConnectionIdentity } from "../../plugins/draftHub";
+import { ConnectionIdentity } from "@/service/signalr/draftHub";
 export default defineComponent({
+  inheritAttrs: false,
   components: {
     UserListItem,
   },

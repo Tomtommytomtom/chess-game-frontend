@@ -1,6 +1,10 @@
 <template>
-  <div class="d-flex">
-    <p>{{ user.name }}</p>
+  <div>
+    <div class="d-flex align-center">
+      <span class="font-weight-heavy">{{ user.name }}</span>
+      <span v-if="user.name === myName"> (You)</span>
+    </div>
+    <v-divider />
   </div>
 </template>
 
@@ -12,6 +16,9 @@ export default defineComponent({
     user: {
       type: Object as () => User,
       required: true,
+    },
+    myName: {
+      type: String,
     },
   },
   setup() {

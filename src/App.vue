@@ -1,6 +1,8 @@
 <template>
   <v-app>
-    <v-app-bar app color="primary" dark> </v-app-bar>
+    <v-app-bar app color="primary" dark
+      ><span class="font-weight-black mr-1">Signal R </span>App</v-app-bar
+    >
     <router-view></router-view>
   </v-app>
 </template>

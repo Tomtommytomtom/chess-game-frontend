@@ -1,13 +1,13 @@
 <template>
-  <base-dialog v-model="visible" title="Create, Join a Room">
+  <base-dialog v-model="visible" title="Create, Join a Room" persistent>
     <template #form>
       <join-form v-model="loginInfo" />
     </template>
     <template #actions>
-      <v-btn text @click="join">
+      <v-btn text @click="join" color="primary">
         Join Room
       </v-btn>
-      <v-btn @click="create">
+      <v-btn @click="create" :disabled="isCreateDisabled" color="primary">
         Create Room
       </v-btn>
     </template>
@@ -15,7 +15,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, Ref, watch } from "@vue/composition-api";
+import {
+  defineComponent,
+  ref,
+  Ref,
+  watch,
+  computed,
+} from "@vue/composition-api";
 import { sync } from "@/service/helpers";
 import JoinForm from "./JoinForm.vue";
 import { LoginInfo, createLoginInfo } from "@/service/models";
@@ -25,7 +31,7 @@ export default defineComponent({
   },
   props: {
     value: Boolean,
-    loginInfo: String,
+    loginInfo: Object as () => LoginInfo,
   },
   setup(props, context) {
     const visible = sync(() => props.value, context.emit);
@@ -34,8 +40,10 @@ export default defineComponent({
       context.emit,
       "update:login-info"
     );
+    const isCreateDisabled = computed(() => !!loginInfo?.value?.groupId);
     return {
       loginInfo,
+      isCreateDisabled,
       visible,
       create: () => context.emit("click:create"),
       join: () => context.emit("click:join"),

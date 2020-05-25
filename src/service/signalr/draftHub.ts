@@ -2,7 +2,9 @@ import { HubConnectionBuilder } from "@microsoft/signalr";
 import { unregisterHandlersForConnection } from "./helpers";
 
 const connection = new HubConnectionBuilder().withUrl("drafthub").build();
-connection.start();
+
+
+export const start = () => connection.start();
 
 const unregisterHandlers = unregisterHandlersForConnection(connection);
 

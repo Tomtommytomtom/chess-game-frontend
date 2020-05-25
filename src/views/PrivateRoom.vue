@@ -1,15 +1,14 @@
 <template>
   <base-view>
-    <h1>{{ loginInfo.username }}</h1>
+    <h1 class="font-weight-light">Room: <span class="font-weight-black">{{connectionInfo.groupId}}</span></h1>
+    <h2 class="font-weight-light">Connected as <span class="font-weight-black">{{ loginInfo.username }}</span></h2>
     <join-dialog
       v-model="visible"
       :login-info.sync="loginInfo"
       @click:create="createRoom"
       @click:join="joinRoom"
     />
-    <template #sidebar>
-      <user-list-sidebar :users="users" />
-    </template>
+      <user-list-sidebar :users="connectionInfo.groupConnections" :my-name="loginInfo.username"/>
   </base-view>
 </template>
 
@@ -23,7 +22,8 @@ import {
   ConnectionInfo,
   ConnectionIdentity,
   sendJoinRoom,
-} from "@/plugins/draftHub.ts";
+  start
+} from "@/service/signalr/draftHub.ts";
 import { createLoginInfo } from "../service/models";
 
 export default defineComponent({
@@ -31,10 +31,19 @@ export default defineComponent({
     JoinDialog,
     UserListSidebar,
   },
-  setup() {
+  props: {
+    groupId: {
+      type: String,
+      default: () => "",
+    },
+  },
+  setup(props) {
     const visible = ref(true);
     const loginInfo = ref(createLoginInfo());
-    const users: Ref<ConnectionIdentity[]> = ref([]);
+
+    loginInfo.value.groupId = props.groupId;
+
+    const connectionInfo: Ref<ConnectionInfo> = ref({})
 
     const createRoom = () => {
       sendCreateRoom(loginInfo.value.username).then(
@@ -46,17 +55,19 @@ export default defineComponent({
       sendJoinRoom(loginInfo.value).then(() => (visible.value = false));
     };
 
-    onUpdateRoom((connectionInfo: ConnectionInfo) => {
-      users.value = connectionInfo.groupConnections;
-      console.log("running handler now to update users", users.value);
+    onUpdateRoom((connInfo: ConnectionInfo) => {
+      connectionInfo.value = connInfo
+      console.log("running handler now to update users", connInfo);
     });
+
+    start().then(() => console.log("connected to drafthub"))
 
     return {
       visible,
       createRoom,
       joinRoom,
       loginInfo,
-      users,
+      connectionInfo
     };
   },
 });

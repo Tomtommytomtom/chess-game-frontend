@@ -1,34 +1,22 @@
 <template>
-  <base-view>
-    <chat-message-box :messages="messages" />
-    <v-text-field v-model="arg"></v-text-field>
-    <v-btn @click="sendHandler">SUBMIT</v-btn>
-    <v-btn to="/room">to room</v-btn>
+  <base-view title="Small SignalR App">
+  <p>{{ text }}</p>
+    <v-btn to="/room">Connect to a Room</v-btn>
+    
   </base-view>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, Ref } from "@vue/composition-api";
-import ChatMessageBox from "@/components/ChatMessageBox.vue";
-import { onNewMessage, sendNewMessage, Message } from "@/plugins/chatHub";
+import { defineComponent } from "@vue/composition-api";
 // @ is an alias to /src
 
 export default defineComponent({
   name: "Home",
-  components: {
-    ChatMessageBox,
-  },
-  setup(props, context) {
-    const messages: Ref<Message[]> = ref([]);
-    const arg = ref("");
-    onNewMessage((res: Message) => {
-      messages.value.unshift(res);
-    });
+  components: {},
+  setup(){
     return {
-      arg,
-      messages,
-      sendHandler: () => sendNewMessage(arg.value),
-    };
-  },
+      text: "Right now you can create or join a Room over a randomly created ID. :) It will show the List of people connected to the Room, nothing more. The Connections are stored in an in memory table, which is a doo doo solution :/"
+    }
+  }
 });
 </script>

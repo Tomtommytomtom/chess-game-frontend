@@ -1,10 +1,12 @@
 <template>
-  <v-dialog v-model="visible">
+  <v-dialog v-model="visible" class="dialog" width="50vw" v-bind="$attrs">
     <v-card>
-      <v-toolbar>
-        <v-toolbar-title>{{ title }}</v-toolbar-title>
+      <v-toolbar color="primary">
+        <v-toolbar-title >{{ title }}</v-toolbar-title>
       </v-toolbar>
+      <v-card-text class="pa-2">
       <slot name="form" />
+      </v-card-text>
       <v-card-actions>
         <slot name="actions" />
       </v-card-actions>
@@ -35,4 +37,8 @@ export default defineComponent({
 });
 </script>
 
-<style scoped></style>
+<style scss scoped>
+.dialog{
+  width: 50vw;
+}
+</style>

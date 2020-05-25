@@ -25,6 +25,12 @@ const routes: Array<RouteConfig> = [
     name: "PrivateRoom",
     component: PrivateRoom,
   },
+  {
+    path: "/room/:groupId",
+    name: "PrivateRoomInstance",
+    component: PrivateRoom,
+    props: true,
+  },
 ];
 
 const router = new VueRouter({

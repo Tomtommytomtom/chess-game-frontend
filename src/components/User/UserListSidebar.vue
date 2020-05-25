@@ -1,14 +1,16 @@
 <template>
   <v-navigation-drawer app right permanent>
-    <h2>Users in this Room</h2>
-    <user-list :users="users" />
+    <v-toolbar>
+      <v-toolbar-title color="secondary">Users in this Room</v-toolbar-title>
+    </v-toolbar>
+    <user-list :users="users" v-bind="$attrs"/>
   </v-navigation-drawer>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "@vue/composition-api";
 import UserList from "./UserList.vue";
-import { ConnectionIdentity } from "../../plugins/draftHub";
+import { ConnectionIdentity } from "@/service/signalr/draftHub";
 export default defineComponent({
   inheritAttrs: false,
   components: {
@@ -17,8 +19,9 @@ export default defineComponent({
   props: {
     users: Array as () => ConnectionIdentity[],
   },
-  setup() {
-    return {};
+  setup(props,context) {
+      console.log(context.attrs)
+      return {}
   },
 });
 </script>

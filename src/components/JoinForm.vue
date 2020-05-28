@@ -1,6 +1,6 @@
 <template>
   <div class="d-flex flex-column">
-    <v-text-field v-model="loginInfo.username" label="Name" />
+    <v-text-field v-model="loginInfo.userName" label="Name" />
     <v-text-field v-model="loginInfo.groupId" label="Room Id" />
   </div>
 </template>

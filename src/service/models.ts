@@ -1,10 +1,10 @@
 export interface LoginInfo {
-  username: string;
+  userName: string;
   groupId: string;
 }
 
 export const createLoginInfo = (): LoginInfo => ({
-  username: "",
+  userName: "",
   groupId: "",
 });
 

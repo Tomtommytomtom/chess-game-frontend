@@ -1,5 +1,5 @@
 <template>
-  <base-dialog v-model="visible" title="Create, Join a Room" persistent>
+  <base-dialog v-model="visible" title="Create, Join a Room">
     <template #form>
       <join-form v-model="loginInfo" />
     </template>
@@ -17,14 +17,11 @@
 <script lang="ts">
 import {
   defineComponent,
-  ref,
-  Ref,
-  watch,
   computed,
 } from "@vue/composition-api";
 import { sync } from "@/service/helpers";
 import JoinForm from "./JoinForm.vue";
-import { LoginInfo, createLoginInfo } from "@/service/models";
+import { LoginInfo } from "@/service/models";
 export default defineComponent({
   components: {
     JoinForm,

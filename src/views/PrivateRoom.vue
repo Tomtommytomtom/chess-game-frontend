@@ -1,35 +1,44 @@
 <template>
   <base-view>
-    <h1 class="font-weight-light">Room: <span class="font-weight-black">{{connectionInfo.groupId}}</span></h1>
-    <h2 class="font-weight-light">Connected as <span class="font-weight-black">{{ loginInfo.username }}</span></h2>
+    <h1 class="font-weight-light">
+      Room: <span class="font-weight-black">{{ connectionInfo.groupId }}</span>
+    </h1>
+    <h2 class="font-weight-light">
+      Connected as
+      <span class="font-weight-black">{{ loginInfo.userName }}</span>
+    </h2>
     <join-dialog
       v-model="visible"
       :login-info.sync="loginInfo"
       @click:create="createRoom"
       @click:join="joinRoom"
     />
-      <user-list-sidebar :users="connectionInfo.groupConnections" :my-name="loginInfo.username"/>
+    <chat-sidebar
+      :users="connectionInfo.groupConnections"
+      :my-name="loginInfo.userName"
+      :user="loginInfo.userName"
+      :group-id="connectionInfo.groupId"
+    />
   </base-view>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, Ref } from "@vue/composition-api";
 import JoinDialog from "@/components/JoinDialog.vue";
-import UserListSidebar from "@/components/User/UserListSidebar.vue";
+import ChatSidebar from "@/components/ChatSidebar.vue";
 import {
   sendCreateRoom,
   onUpdateRoom,
   ConnectionInfo,
-  ConnectionIdentity,
   sendJoinRoom,
-  start
+  start,
 } from "@/service/signalr/draftHub.ts";
 import { createLoginInfo } from "../service/models";
 
 export default defineComponent({
   components: {
     JoinDialog,
-    UserListSidebar,
+    ChatSidebar,
   },
   props: {
     groupId: {
@@ -42,11 +51,12 @@ export default defineComponent({
     const loginInfo = ref(createLoginInfo());
 
     loginInfo.value.groupId = props.groupId;
+    loginInfo.value.userName = "Oconnor";
 
-    const connectionInfo: Ref<ConnectionInfo> = ref({})
+    const connectionInfo: Ref<ConnectionInfo> = ref({});
 
     const createRoom = () => {
-      sendCreateRoom(loginInfo.value.username).then(
+      sendCreateRoom(loginInfo.value.userName).then(
         () => (visible.value = false)
       );
     };
@@ -56,18 +66,18 @@ export default defineComponent({
     };
 
     onUpdateRoom((connInfo: ConnectionInfo) => {
-      connectionInfo.value = connInfo
+      connectionInfo.value = connInfo;
       console.log("running handler now to update users", connInfo);
     });
 
-    start().then(() => console.log("connected to drafthub"))
+    start().then(() => console.log("connected to drafthub"));
 
     return {
       visible,
       createRoom,
       joinRoom,
       loginInfo,
-      connectionInfo
+      connectionInfo,
     };
   },
 });

@@ -1,53 +1,74 @@
 <template>
-  <v-navigation-drawer app right permanent>
-    <div class="box">
-      <v-toolbar class="header">
-        <v-toolbar-title color="secondary">Users in this Room</v-toolbar-title>
-      </v-toolbar>
-      <user-list class="users" :users="users" v-bind="$attrs"/>
-      <div class="content">
-        chat
-      </div>
-    </div>
+  <v-navigation-drawer app right permanent style="overflow-y: hidden;">
+    <chat
+      :messages="messages"
+      @submit:message="sendNewMessage"
+      title="Room Chat"
+      :user="user"
+    />
   </v-navigation-drawer>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "@vue/composition-api";
+import { defineComponent, ref, Ref } from "@vue/composition-api";
 import UserList from "./User/UserList.vue";
-import { ConnectionIdentity } from "@/service/signalr/draftHub";
+import Chat from "./Chat/Chat.vue";
+import {
+  ConnectionIdentity,
+  sendNewMessageToGroup,
+  onMessageFromGroupReceived,
+  GroupMessageReceivedConfig,
+} from "@/service/signalr/draftHub";
+import { testMessages } from "@/service/testData";
+
 export default defineComponent({
   inheritAttrs: false,
   components: {
     UserList,
+    Chat,
   },
   props: {
     users: Array as () => ConnectionIdentity[],
+    groupId: {
+      type: String,
+      required: true,
+    },
+    user: {
+      type: String,
+      required: true,
+    },
   },
-  setup(props,context) {
-      console.log(context.attrs)
-      return {}
+  setup(props) {
+    const messages: Ref<GroupMessageReceivedConfig[]> = ref(testMessages);
+    onMessageFromGroupReceived((config: GroupMessageReceivedConfig) => {
+      messages.value.push(config);
+    });
+
+    const sendNewMessage = (message: string) =>
+      sendNewMessageToGroup({
+        groupId: props.groupId,
+        userName: props.user,
+        message,
+      });
+
+    return {
+      sendNewMessage,
+      messages,
+    };
   },
 });
 </script>
 
 <style lang="scss">
-.box{
+.box {
   display: flex;
-  flex-flow: column;
-  height: 100%;
+  flex-direction: column;
+  height: 100vh;
 }
-.header{
-  flex: 0 1 auto;
-  border: grey dotted 1px;
+.fixed {
+  flex: 0 1 300px;
 }
-.users{
-  flex: 0 1 20%;
-  border: grey dotted 1px;
-  overflow-y: auto;
-}
-.content{
+.stretch {
   flex: 1 1 auto;
-  border: grey dotted 1px;
 }
 </style>

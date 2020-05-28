@@ -1,12 +1,12 @@
 <template>
-  <v-card>
+  <div>
     <chat-message
       v-for="(message, index) in messages"
       :key="index"
-      :username="message.username"
-      :message="message.message"
+      :message="message"
+      v-bind="$attrs"
     />
-  </v-card>
+  </div>
 </template>
 
 <script lang="ts">
@@ -25,4 +25,4 @@ export default defineComponent({
 });
 </script>
 
-<style scoped></style>
+<style></style>

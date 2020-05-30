@@ -1,7 +1,7 @@
 const path = require("path");
 module.exports = {
   transpileDependencies: ["vuetify"],
-  outputDir: path.resolve(__dirname, "../signal-r-backend/wwwroot"),
+  outputDir: path.resolve(__dirname, "../chess-game-backend/wwwroot"),
   // configureWebpack: {
   //   module: {
   //     rules: [

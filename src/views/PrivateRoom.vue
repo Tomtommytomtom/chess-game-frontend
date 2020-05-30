@@ -7,6 +7,7 @@
       Connected as
       <span class="font-weight-black">{{ loginInfo.userName }}</span>
     </h2>
+    <chess-board />
     <join-dialog
       v-model="visible"
       :login-info.sync="loginInfo"
@@ -26,6 +27,7 @@
 import { defineComponent, ref, Ref } from "@vue/composition-api";
 import JoinDialog from "@/components/JoinDialog.vue";
 import ChatSidebar from "@/components/ChatSidebar.vue";
+import ChessBoard from "@/components/Chess/ChessBoard.vue";
 import {
   sendCreateRoom,
   onUpdateRoom,
@@ -39,6 +41,7 @@ export default defineComponent({
   components: {
     JoinDialog,
     ChatSidebar,
+    ChessBoard,
   },
   props: {
     groupId: {

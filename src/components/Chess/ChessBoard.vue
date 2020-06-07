@@ -1,53 +1,70 @@
 <template>
-  <div>
-    <div v-for="c in 8" :key="c" class="d-flex">
-      <div
-        v-for="r in 8"
-        :key="r"
-        class="outlined"
-        :class="{ colored: (c + r) % 2 == 0 }"
-      >
-        <chess-figure :figure="board[c - 1][r - 1]" />
+  <base-view>
+    <div v-for="r in 9" :key="r" class="d-flex board">
+      <div v-for="c in 9" :key="c" class="d-flex justify-center align-center">
+        <div v-if="c == 1 && r != 1" class="mr-1">{{ r - 1 }}</div>
+        <div
+          v-if="r == 1 && c != 1"
+          class="d-flex align-center justify-center"
+          :class="{ ml1: c == 2 }"
+          style="width: 10vw; max-width: 10vh;"
+        >
+          {{ c - 1 }}
+        </div>
+        <chess-field v-if="c > 1 && r > 1" :row="r - 1" :column="c - 1" />
       </div>
     </div>
-  </div>
+  </base-view>
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from "@vue/composition-api";
-import ChessFigure from "./ChessFigure.vue";
-import {
-  ChessGameState,
-  createStartChessGameState,
-} from "../../service/models";
+import { defineComponent } from "@vue/composition-api";
+import ChessField from "./ChessField.vue";
 
 export default defineComponent({
   components: {
-    ChessFigure,
+    ChessField,
   },
   props: {
-    gameState: {
-      type: Object as () => ChessGameState,
-      default: () => createStartChessGameState(),
+    possibleMoves: {
+      types: Array,
+      default: () => [],
+    },
+    isMyTurn: {
+      type: Boolean,
+      default: false,
     },
   },
-  setup(props) {
-    const board = computed(() => props.gameState.board);
-    console.log(board);
-    return {
-      board,
-    };
+  setup(props, context) {
+    return {};
   },
 });
 </script>
 
 <style lang="scss">
 .outlined {
-  width: 50px;
-  height: 50px;
+  max-width: 10vh;
+  max-height: 10vh;
+  width: 10vw;
+  height: 10vw;
   background-color: rgb(2, 95, 95);
 }
 .colored {
   background-color: cyan;
+}
+.left {
+  border-left: 3px solid cyan;
+}
+.top {
+  border-top: 3px solid cyan;
+}
+.right {
+  border-right: 3px solid cyan;
+}
+.bottom {
+  border-bottom: 3px solid cyan;
+}
+.board:first-child {
+  margin-left: 12px;
 }
 </style>

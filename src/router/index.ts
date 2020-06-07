@@ -2,6 +2,7 @@ import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
 import Home from "../views/Home.vue";
 import PrivateRoom from "../views/PrivateRoom.vue";
+import TestChess from "../views/TestChess.vue";
 
 Vue.use(VueRouter);
 
@@ -30,6 +31,11 @@ const routes: Array<RouteConfig> = [
     name: "PrivateRoomInstance",
     component: PrivateRoom,
     props: true,
+  },
+  {
+    path: "/testchess",
+    name: "TestChess",
+    component: TestChess,
   },
 ];
 
